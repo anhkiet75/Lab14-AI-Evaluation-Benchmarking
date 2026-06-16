@@ -29,13 +29,15 @@ class BenchmarkRunner:
         return {
             "test_case": test_case["question"],
             "agent_response": response["answer"],
+            "agent_metadata": response.get("metadata", {}),
+            "retrieved_ids": response.get("retrieved_ids", []),
             "latency": latency,
             "ragas": ragas_scores,
             "judge": judge_result,
             "status": "fail" if judge_result["final_score"] < 3 else "pass"
         }
 
-    async def run_all(self, dataset: List[Dict], batch_size: int = 5) -> List[Dict]:
+    async def run_all(self, dataset: List[Dict], batch_size: int = 10) -> List[Dict]:
         """
         Chạy song song bằng asyncio.gather với giới hạn batch_size để không bị Rate Limit.
         """
